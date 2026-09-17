@@ -1,0 +1,2 @@
+Hello from GitHub
+Jenkins CI/CD practical project
