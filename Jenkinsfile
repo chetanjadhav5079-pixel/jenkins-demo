@@ -18,6 +18,13 @@ pipeline {
             }
         }
 
+        stage('Docker Build') {
+            steps {
+                echo 'Building Docker image...'
+                sh 'docker build -t jenkins-demo:1.0 .'
+            }
+        }
+
         stage('Deploy to DEV') {
             when {
                 expression {
