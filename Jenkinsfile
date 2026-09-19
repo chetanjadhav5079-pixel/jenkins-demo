@@ -50,6 +50,20 @@ pipeline {
                 echo 'Deploying application to PROD environment'
             }
         }
+
+        stage('Credentials Test') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'demo',
+                        usernameVariable: 'USERNAME',
+                        passwordVariable: 'PASSWORD'
+                    )
+                ]) {
+                    sh 'echo "Username: $USERNAME"'
+                }
+            }
+        }
     }
 
     post {
