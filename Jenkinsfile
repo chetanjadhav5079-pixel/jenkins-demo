@@ -6,6 +6,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Build stage started'
+                echo "Selected Environment: ${params.ENV}"
                 sh 'cat app.txt'
             }
         }
