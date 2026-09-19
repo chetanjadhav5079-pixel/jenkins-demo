@@ -1,3 +1,4 @@
+```groovy
 pipeline {
     agent any
 
@@ -22,6 +23,19 @@ pipeline {
             steps {
                 echo 'Building Docker image...'
                 sh 'docker build -t jenkins-demo:1.0 .'
+            }
+        }
+
+        stage('Push to ECR') {
+            steps {
+                echo 'Pushing Docker image to ECR...'
+                sh '''
+                    aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 426550965418.dkr.ecr.us-east-2.amazonaws.com
+
+                    docker tag jenkins-demo:1.0 426550965418.dkr.ecr.us-east-2.amazonaws.com/jenkins-demo:1.0
+
+                    docker push 426550965418.dkr.ecr.us-east-2.amazonaws.com/jenkins-demo:1.0
+                '''
             }
         }
 
