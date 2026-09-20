@@ -1,54 +1,281 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Jenkins CI/CD Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DevOps CI/CD Dashboard</title>
+
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, #243b80, transparent 35%),
+                radial-gradient(circle at bottom right, #6a1b9a, transparent 35%),
+                #0b1020;
             color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1050px;
+        }
+
+        .hero {
             text-align: center;
-            padding-top: 120px;
+            margin-bottom: 35px;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 40px;
-            margin: auto;
-            width: 500px;
-            border-radius: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        .badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 30px;
+            background: rgba(255,255,255,0.08);
+            font-size: 14px;
+            margin-bottom: 18px;
         }
 
-        h1 {
-            font-size: 42px;
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
         }
 
-        p {
-            font-size: 20px;
+        .hero h1 span {
+            color: #7dd3fc;
         }
 
-        .status {
+        .hero p {
+            color: #b8c1d9;
+            font-size: 18px;
+        }
+
+        .main-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+        }
+
+        .success {
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 16px;
+            background: rgba(34,197,94,0.12);
+            border: 1px solid rgba(34,197,94,0.35);
+        }
+
+        .success h2 {
+            color: #4ade80;
+            margin-bottom: 8px;
+        }
+
+        .success p {
+            color: #c7f9d4;
+        }
+
+        .pipeline {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            align-items: center;
+        }
+
+        .stage {
+            text-align: center;
+            padding: 22px 10px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+
+        .stage:hover {
+            transform: translateY(-6px);
+            background: rgba(255,255,255,0.12);
+        }
+
+        .icon {
+            font-size: 35px;
+            margin-bottom: 12px;
+        }
+
+        .stage h3 {
+            font-size: 16px;
+            margin-bottom: 7px;
+        }
+
+        .stage p {
+            font-size: 13px;
+            color: #aeb8d0;
+        }
+
+        .arrow {
+            display: none;
+        }
+
+        .info-grid {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .info-card {
+            padding: 22px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .info-card h3 {
+            font-size: 15px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        .info-card strong {
+            font-size: 21px;
+            color: #f8fafc;
+        }
+
+        .footer {
+            text-align: center;
             margin-top: 25px;
-            font-weight: bold;
+            color: #7f8aa8;
+            font-size: 13px;
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            background: #4ade80;
+            border-radius: 50%;
+            margin-right: 7px;
+            box-shadow: 0 0 12px #4ade80;
+        }
+
+        @media (max-width: 800px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .pipeline {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="card">
-    <h1>🚀 Jenkins CI/CD</h1>
+<div class="container">
 
-    <p>Welcome to my DevOps project</p>
+    <div class="hero">
 
-    <p class="status">
-        ✅ Deployment Successful
-    </p>
+        <div class="badge">
+            <span class="pulse"></span>
+            LIVE DEPLOYMENT
+        </div>
 
-    <p>
+        <h1>🚀 DevOps <span>CI/CD</span> Platform</h1>
+
+        <p>Automated application deployment using modern DevOps tools</p>
+
+    </div>
+
+
+    <div class="main-card">
+
+        <div class="success">
+            <h2>✅ Deployment Successful</h2>
+            <p>Application is running successfully on Amazon EKS</p>
+        </div>
+
+
+        <div class="pipeline">
+
+            <div class="stage">
+                <div class="icon">🐙</div>
+                <h3>GitHub</h3>
+                <p>Source Code</p>
+            </div>
+
+            <div class="stage">
+                <div class="icon">🔨</div>
+                <h3>Jenkins</h3>
+                <p>CI/CD Pipeline</p>
+            </div>
+
+            <div class="stage">
+                <div class="icon">🐳</div>
+                <h3>Docker</h3>
+                <p>Container Build</p>
+            </div>
+
+            <div class="stage">
+                <div class="icon">📦</div>
+                <h3>AWS ECR</h3>
+                <p>Container Registry</p>
+            </div>
+
+            <div class="stage">
+                <div class="icon">☸️</div>
+                <h3>Amazon EKS</h3>
+                <p>Container Deployment</p>
+            </div>
+
+        </div>
+
+
+        <div class="info-grid">
+
+            <div class="info-card">
+                <h3>Deployment</h3>
+                <strong>Automatic</strong>
+            </div>
+
+            <div class="info-card">
+                <h3>Container Platform</h3>
+                <strong>Docker</strong>
+            </div>
+
+            <div class="info-card">
+                <h3>Orchestration</h3>
+                <strong>Amazon EKS</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
         GitHub → Jenkins → Docker → ECR → EKS
-    </p>
+        <br><br>
+        Built as a practical AWS DevOps CI/CD project
+    </div>
+
 </div>
 
 </body>
