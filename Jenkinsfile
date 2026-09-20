@@ -7,7 +7,7 @@ pipeline {
             steps {
                 echo 'Build stage started'
                 echo "Selected Environment: ${params.ENV}"
-                sh 'cat app.txt'
+                sh 'cat index.html'
             }
         }
 
@@ -116,4 +116,3 @@ pipeline {
         }
     }
 }
-
