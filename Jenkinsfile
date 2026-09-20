@@ -20,21 +20,30 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                echo 'Building Docker image...'
-                sh 'docker build -t jenkins-demo:1.0 .'
+                echo "Building Docker image: ${BUILD_NUMBER}"
+
+                sh """
+                    docker build -t jenkins-demo:${BUILD_NUMBER} .
+                """
             }
         }
 
         stage('Push to ECR') {
             steps {
-                echo 'Pushing Docker image to ECR...'
-                sh '''
-                    aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 426550965418.dkr.ecr.us-east-2.amazonaws.com
+                echo "Pushing Docker image ${BUILD_NUMBER} to ECR..."
 
-                    docker tag jenkins-demo:1.0 426550965418.dkr.ecr.us-east-2.amazonaws.com/jenkins-demo:1.0
+                sh """
+                    aws ecr get-login-password --region us-east-2 | \
+                    docker login --username AWS --password-stdin \
+                    426550965418.dkr.ecr.us-east-2.amazonaws.com
 
-                    docker push 426550965418.dkr.ecr.us-east-2.amazonaws.com/jenkins-demo:1.0
-                '''
+                    docker tag \
+                    jenkins-demo:${BUILD_NUMBER} \
+                    426550965418.dkr.ecr.us-east-2.amazonaws.com/jenkins-demo:${BUILD_NUMBER}
+
+                    docker push \
+                    426550965418.dkr.ecr.us-east-2.amazonaws.com/jenkins-demo:${BUILD_NUMBER}
+                """
             }
         }
 
@@ -44,8 +53,17 @@ pipeline {
                     params.ENV == 'dev'
                 }
             }
+
             steps {
-                echo 'Deploying application to DEV environment'
+                echo "Deploying build ${BUILD_NUMBER} to DEV"
+
+                sh """
+                    kubectl -n default set image deployment/jenkins-demo \
+                    jenkins-demo=426550965418.dkr.ecr.us-east-2.amazonaws.com/jenkins-demo:${BUILD_NUMBER}
+
+                    kubectl -n default rollout status deployment/jenkins-demo \
+                    --timeout=180s
+                """
             }
         }
 
@@ -55,6 +73,7 @@ pipeline {
                     params.ENV == 'qa'
                 }
             }
+
             steps {
                 echo 'Deploying application to QA environment'
             }
@@ -66,6 +85,7 @@ pipeline {
                     params.ENV == 'prod'
                 }
             }
+
             steps {
                 echo 'Deploying application to PROD environment'
             }
@@ -96,3 +116,4 @@ pipeline {
         }
     }
 }
+
